@@ -23,12 +23,12 @@ public class Parchment implements ModInitializer {
 
 	public static final ScriptEngineManager MANAGER = new ScriptEngineManager(ScriptClassLoader.INSTANCE);
 
-	public static final Map<Class<? extends ScriptEngineFactory>, UnaryOperator<ScriptEngine>> INITIALIZERS = new HashMap<>();
+	public static final Map<Class<? extends ScriptEngineFactory>, ScriptEngineInitializer> INITIALIZERS = new HashMap<>();
 
 	@Override
 	public void onInitialize() {
 		FabricLoader.getInstance().getEntrypoints(MODID + ":engine_initializer", ScriptEngineInitializer.class)
-				.forEach(loader -> INITIALIZERS.put(loader.getEngineFactory(), loader.getEngineInitializer()));
+				.forEach(loader -> INITIALIZERS.put(loader.getEngineFactory(), loader));
 
 	}
 }

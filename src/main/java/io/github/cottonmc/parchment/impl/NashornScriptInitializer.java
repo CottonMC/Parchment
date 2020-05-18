@@ -16,7 +16,7 @@ public class NashornScriptInitializer implements ScriptEngineInitializer {
 	}
 
 	@Override
-	public UnaryOperator<ScriptEngine> getEngineInitializer() {
-		return UnaryOperator.identity();
+	public ScriptEngine initialize(ScriptEngine engine) {
+		return engine;
 	}
 }

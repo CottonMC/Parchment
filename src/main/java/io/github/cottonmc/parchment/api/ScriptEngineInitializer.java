@@ -1,7 +1,5 @@
 package io.github.cottonmc.parchment.api;
 
-import java.util.function.UnaryOperator;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
@@ -15,7 +13,9 @@ public interface ScriptEngineInitializer {
 	Class<? extends ScriptEngineFactory> getEngineFactory();
 
 	/**
-	 * @return An operator which applies any necessary changes to an engine before it's passed off to the loader.
+	 * Prepare a script engine to be used.
+	 * @param engine An engine to be used to initialize a script.
+	 * @return The same script engine passed in, with bindings set.
 	 */
-	UnaryOperator<ScriptEngine> getEngineInitializer();
+	ScriptEngine initialize(ScriptEngine engine);
 }
