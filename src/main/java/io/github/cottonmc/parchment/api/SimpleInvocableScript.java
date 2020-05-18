@@ -26,6 +26,7 @@ public class SimpleInvocableScript extends SimpleScript implements InvocableScri
 			return invocable.invokeFunction(name, arguments);
 		} catch (ScriptException | NoSuchMethodException e) {
 			getLogger().error("Error invoking script {}: {}", getId().toString(), e.getMessage());
+			e.printStackTrace();
 			hadError = true;
 			return null;
 		}

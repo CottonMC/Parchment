@@ -45,6 +45,7 @@ public class SimpleCompilableScript extends SimpleScript implements CompilableSc
 				compiled.eval();
 			} catch (Exception e) {
 				getLogger().error("Script {} encountered error while running: {}", getId().toString(), e.getMessage());
+				e.printStackTrace();
 				hadError = true;
 			}
 			hasRun = true;

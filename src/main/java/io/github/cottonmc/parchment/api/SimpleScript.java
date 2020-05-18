@@ -58,6 +58,7 @@ public class SimpleScript implements Script {
 			engine.eval(contents);
 		} catch (Exception e) {
 			getLogger().error("Script {} encountered error while running: {}", name.toString(), e.getMessage());
+			e.printStackTrace();
 			hadError = true;
 		}
 		hasRun = true;
