@@ -9,6 +9,7 @@ import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 
+import io.github.cottonmc.parchment.Parchment;
 import io.github.cottonmc.parchment.impl.ScriptLoaderImpl;
 import org.apache.commons.io.IOUtils;
 
@@ -43,6 +44,31 @@ public interface ScriptLoader {
 	@Nullable
 	default Script loadScript(ScriptFactory factory, Identifier id, InputStream contents) throws IOException, IllegalArgumentException {
 		return loadScript(factory, id, IOUtils.toString(contents, Charset.defaultCharset()));
+	}
+
+	/**
+	 * Load an anonymous (no identifier) script from a string.
+	 * @param factory The factory to assemble the loaded script with.
+	 * @param extension the extension of the script, without the `.`.
+	 * @param contents The string contents of the script.
+	 * @return The prepared script object.
+	 * @throws IllegalArgumentException if there is no script engine for the extension.
+	 */
+	default Script loadAnonymousScript(ScriptFactory factory, String extension, String contents) throws IllegalArgumentException {
+		return loadScript(factory, new Identifier(Parchment.MODID, "anonymous." + extension), contents);
+	}
+
+	/**
+	 * Load an anonymous (no identifier) script from an input stream.
+	 * @param factory The factory to assemble the loaded script with.
+	 * @param extension the extension of the script, without the `.`.
+	 * @param contents The contents of the script as an input stream.
+	 * @return The prepared script object.
+	 * @throws IOException if the input stream cannot be converted to a string.
+	 * @throws IllegalArgumentException if there is no script engine for the extension.
+	 */
+	default Script loadAnonymousScript(ScriptFactory factory, String extension, InputStream contents) throws IOException, IllegalArgumentException {
+		return loadScript(factory, new Identifier(Parchment.MODID, "anonymous." + extension), contents);
 	}
 
 	/**

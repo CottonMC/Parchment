@@ -17,7 +17,7 @@ public class ScriptLoaderImpl implements ScriptLoader {
 	@Nullable
 	@Override
 	public Script loadScript(ScriptFactory factory, Identifier id, String contents) {
-		String extension = id.getPath().substring(id.getPath().lastIndexOf('.'));
+		String extension = id.getPath().substring(id.getPath().lastIndexOf('.') + 1);
 		ScriptEngine engine = Parchment.MANAGER.getEngineByExtension(extension);
 		if (engine == null) throw new IllegalArgumentException("No script engine exists for extension '" + extension + "'");
 		ScriptEngineInitializer initializer = Parchment.INITIALIZERS.getOrDefault(engine.getFactory().getClass(), NullEngineInitializer.INSTANCE);
