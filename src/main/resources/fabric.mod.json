@@ -1,24 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "starter",
+  "id": "parchment",
   "version": "${version}",
 
-  "name": "Fabric Starter",
+  "name": "Parchment",
   "icon": "assets/starter/icon.png",
-  "description": "Template for starting out Fabric mods",
+  "description": "Foundational lib for loading and executing scripts in Fabric",
   "license": "MIT",
   "contact": {
-    "sources": "https://github.com/CottonMC/FabricStarter"
+    "sources": "https://github.com/CottonMC/Parchment"
   },
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.cottonmc.starter.FabricStarter"
+      "io.github.cottonmc.parchment.Parchment"
     ]
   },
-  "mixins": [
-    "mixins.starter.json"
-  ],
   "depends": {
     "fabricloader": ">=0.4.0"
   },
