@@ -30,7 +30,8 @@ public interface ScriptLoader {
 	 * @throws IllegalArgumentException if there is no script engine for the extension.
 	 */
 	@Nullable
-	Script loadScript(ScriptFactory factory, Identifier id, String contents) throws IllegalArgumentException;
+	<T extends Script> T loadScript(ScriptFactory<T> factory, Identifier id, String contents)
+			throws IllegalArgumentException;
 
 	/**
 	 * Load a script from an input stream.
@@ -42,7 +43,8 @@ public interface ScriptLoader {
 	 * @throws IllegalArgumentException if there is no script engine for the extension.
 	 */
 	@Nullable
-	default Script loadScript(ScriptFactory factory, Identifier id, InputStream contents) throws IOException, IllegalArgumentException {
+	default <T extends Script> T loadScript(ScriptFactory<T> factory, Identifier id, InputStream contents)
+			throws IOException, IllegalArgumentException {
 		return loadScript(factory, id, IOUtils.toString(contents, Charset.defaultCharset()));
 	}
 
@@ -54,7 +56,8 @@ public interface ScriptLoader {
 	 * @return The prepared script object.
 	 * @throws IllegalArgumentException if there is no script engine for the extension.
 	 */
-	default Script loadAnonymousScript(ScriptFactory factory, String extension, String contents) throws IllegalArgumentException {
+	default <T extends Script> T loadAnonymousScript(ScriptFactory<T> factory, String extension, String contents)
+			throws IllegalArgumentException {
 		return loadScript(factory, new Identifier(Parchment.MODID, "anonymous." + extension), contents);
 	}
 
@@ -67,23 +70,24 @@ public interface ScriptLoader {
 	 * @throws IOException if the input stream cannot be converted to a string.
 	 * @throws IllegalArgumentException if there is no script engine for the extension.
 	 */
-	default Script loadAnonymousScript(ScriptFactory factory, String extension, InputStream contents) throws IOException, IllegalArgumentException {
+	default <T extends Script> T loadAnonymousScript(ScriptFactory<T> factory, String extension, InputStream contents)
+			throws IOException, IllegalArgumentException {
 		return loadScript(factory, new Identifier(Parchment.MODID, "anonymous." + extension), contents);
 	}
 
 	/**
 	 * Interface used to build prepared scripts.
 	 */
-	interface ScriptFactory {
+	interface ScriptFactory<T extends Script> {
 		/**
 		 * A script factory which creates simple script wrappers.
 		 */
-		ScriptFactory SIMPLE = SimpleScript::new;
+		ScriptFactory<SimpleScript> SIMPLE = SimpleScript::new;
 
 		/**
 		 * A script factory which creates script wrappers that compile beforehand.
 		 */
-		ScriptFactory SIMPLE_COMPILABLE = (engine, id, contents) -> {
+		ScriptFactory<SimpleCompilableScript> SIMPLE_COMPILABLE = (engine, id, contents) -> {
 			if (!(engine instanceof Compilable)) return null; //TODO: log?
 			return new SimpleCompilableScript(engine, id, contents);
 		};
@@ -91,7 +95,7 @@ public interface ScriptLoader {
 		/**
 		 * A script factory which creates script wrappers that can invoke functions.
 		 */
-		ScriptFactory SIMPLE_INVOCABLE = (engine, id, contents) -> {
+		ScriptFactory<SimpleInvocableScript> SIMPLE_INVOCABLE = (engine, id, contents) -> {
 			if (!(engine instanceof Invocable)) return null; //TODO: log?
 			return new SimpleInvocableScript(engine, id, contents);
 		};
@@ -99,7 +103,7 @@ public interface ScriptLoader {
 		/**
 		 * A script factory which creates script wrappers that compile beforehand and can invoke functions.
 		 */
-		ScriptFactory SIMPLE_FULL = (engine, id, contents) -> {
+		ScriptFactory<SimpleFullScript> SIMPLE_FULL = (engine, id, contents) -> {
 			if (!(engine instanceof Compilable) || !(engine instanceof Invocable)) return null; //TODO: log?
 			return new SimpleFullScript(engine, id, contents);
 		};
@@ -111,6 +115,6 @@ public interface ScriptLoader {
 		 * @return The prepared script wrapper.
 		 */
 		@Nullable
-		Script build(ScriptEngine engine, Identifier id, String contents);
+		T build(ScriptEngine engine, Identifier id, String contents);
 	}
 }

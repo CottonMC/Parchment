@@ -10,7 +10,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 
 import io.github.cottonmc.parchment.api.ScriptEngineInitializer;
-import io.github.cottonmc.parchment.impl.NashornScriptInitializer;
 import io.github.cottonmc.parchment.impl.ScriptClassLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +21,8 @@ public class Parchment implements ModInitializer {
 
 	public static final ScriptEngineManager MANAGER = new ScriptEngineManager(ScriptClassLoader.INSTANCE);
 
-	public static final Map<Class<? extends ScriptEngineFactory>, ScriptEngineInitializer> INITIALIZERS = new HashMap<>();
+	public static final Map<Class<? extends ScriptEngineFactory>, ScriptEngineInitializer> INITIALIZERS =
+			new HashMap<>();
 
 	@Override
 	public void onInitialize() {

@@ -16,18 +16,20 @@ public class ScriptLoaderImpl implements ScriptLoader {
 
 	@Nullable
 	@Override
-	public Script loadScript(ScriptFactory factory, Identifier id, String contents) {
+	public <T extends Script> T loadScript(ScriptFactory<T> factory, Identifier id, String contents) {
 		String extension = id.getPath().substring(id.getPath().lastIndexOf('.') + 1);
 		ScriptEngine engine = Parchment.MANAGER.getEngineByExtension(extension);
-		if (engine == null) throw new IllegalArgumentException("No script engine exists for extension '" + extension + "'");
-		ScriptEngineInitializer initializer = Parchment.INITIALIZERS.getOrDefault(engine.getFactory().getClass(), NullEngineInitializer.INSTANCE);
+		if (engine == null) throw new IllegalArgumentException("No script engine exists for extension '" + extension
+				+ "'");
+		ScriptEngineInitializer initializer = Parchment.INITIALIZERS.getOrDefault(engine.getFactory().getClass(),
+				NoOpEngineInitializer.INSTANCE);
 		engine = initializer.initialize(engine);
 
 		return factory.build(engine, id, contents);
 	}
 
-	private static class NullEngineInitializer implements ScriptEngineInitializer {
-		private static final NullEngineInitializer INSTANCE = new NullEngineInitializer();
+	private static class NoOpEngineInitializer implements ScriptEngineInitializer {
+		private static final NoOpEngineInitializer INSTANCE = new NoOpEngineInitializer();
 
 		@Override
 		public Class<? extends ScriptEngineFactory> getEngineFactory() {

@@ -12,7 +12,7 @@ public interface InvocableScript extends Script {
 	 * @param arguments The arguments passed to this function.
 	 * @return The result of the function, or null if the function doesn't exist or exists and returns nothing.
 	 */
-	//TODO: throw if the function doesn't exist?
+	//TODO: throw if the function doesn't exist? Is that possible?
 	@Nullable
 	Object invokeFunction(String name, Object...arguments);
 }

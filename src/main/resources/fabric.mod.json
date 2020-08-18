@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Parchment",
-  "icon": "assets/starter/icon.png",
+  "icon": "assets/parchment/icon.png",
   "description": "Foundational lib for loading and executing scripts in Fabric",
   "license": "MIT",
   "contact": {

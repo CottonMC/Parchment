@@ -17,6 +17,7 @@ public class NashornScriptInitializer implements ScriptEngineInitializer {
 	//necessary thanks to Nashorn's *incredible* compliance with JSR223 /s
 	@Override
 	public ScriptEngine initialize(ScriptEngine engine) {
-		return NASHORN_FACTORY.getScriptEngine(name -> !name.startsWith("java.io") && !name.startsWith("java.nio") && !name.startsWith("java.net"));
+		return NASHORN_FACTORY.getScriptEngine(name -> !name.startsWith("java.io") && !name.startsWith("java.nio")
+				&& !name.startsWith("java.net"));
 	}
 }

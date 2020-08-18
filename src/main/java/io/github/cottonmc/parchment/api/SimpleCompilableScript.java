@@ -15,7 +15,6 @@ public class SimpleCompilableScript extends SimpleScript implements CompilableSc
 	protected CompiledScript compiled;
 	protected boolean hadCompileError = false;
 
-
 	public SimpleCompilableScript(ScriptEngine engine, Identifier name, String contents) {
 		super(engine, name, contents);
 		this.compilable = (Compilable)engine;

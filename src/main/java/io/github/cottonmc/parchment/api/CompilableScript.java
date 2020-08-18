@@ -14,5 +14,8 @@ public interface CompilableScript extends Script {
 	@Nullable
 	CompiledScript getCompiledScript();
 
+	/**
+	 * @return Whether the script encountered an error while compiling.
+	 */
 	boolean hadCompileError();
 }

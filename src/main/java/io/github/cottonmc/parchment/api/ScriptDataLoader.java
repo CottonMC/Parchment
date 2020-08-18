@@ -19,15 +19,15 @@ import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 /**
  * A resource reload listener which loads a collection of scripts.
  */
-public abstract class ScriptDataLoader implements SimpleResourceReloadListener<Map<Identifier, Script>> {
-	private ScriptLoader.ScriptFactory factory;
-	private String dataType;
+public abstract class ScriptDataLoader<T extends Script> implements SimpleResourceReloadListener<Map<Identifier, T>> {
+	private final ScriptLoader.ScriptFactory<T> factory;
+	private final String dataType;
 
 	/**
 	 * @param factory The factory for assembling Script objects.
 	 * @param dataType The subfolder to search in for scripts.
 	 */
-	public ScriptDataLoader(ScriptLoader.ScriptFactory factory, String dataType) {
+	public ScriptDataLoader(ScriptLoader.ScriptFactory<T> factory, String dataType) {
 		this.factory = factory;
 		this.dataType = dataType;
 	}
@@ -40,7 +40,8 @@ public abstract class ScriptDataLoader implements SimpleResourceReloadListener<M
 	 * @param executor The executor for running things on the main thread.
 	 */
 	@Override
-	public abstract CompletableFuture<Void> apply(Map<Identifier, Script> scripts, ResourceManager resourceManager, Profiler profiler, Executor executor);
+	public abstract CompletableFuture<Void> apply(Map<Identifier, T> scripts, ResourceManager resourceManager,
+												  Profiler profiler, Executor executor);
 
 	/**
 	 * @return The ID of this reload listener.
@@ -51,13 +52,14 @@ public abstract class ScriptDataLoader implements SimpleResourceReloadListener<M
 	/**
 	 * @return The logger used to print errors.
 	 */
-	abstract Logger getLogger();
+	public abstract Logger getLogger();
 
 	//doesn't throw so that it doesn't cause cascading failure
 	@Override
-	public CompletableFuture<Map<Identifier, Script>> load(ResourceManager resourceManager, Profiler profiler, Executor executor) {
+	public CompletableFuture<Map<Identifier, T>> load(ResourceManager resourceManager, Profiler profiler,
+													  Executor executor) {
 		return CompletableFuture.supplyAsync(() -> {
-			Map<Identifier, Script> scripts = new HashMap<>();
+			Map<Identifier, T> scripts = new HashMap<>();
 			int startIndex = dataType.length() + 1;
 			Collection<Identifier> resources = resourceManager.findResources(dataType, name -> true);
 
@@ -65,8 +67,8 @@ public abstract class ScriptDataLoader implements SimpleResourceReloadListener<M
 				Identifier scriptId = new Identifier(id.getNamespace(), id.getPath().substring(startIndex));
 				try {
 					Resource resource = resourceManager.getResource(id);
-					Script script = ScriptLoader.INSTANCE.loadScript(factory, scriptId, resource.getInputStream());
-					Script oldScript = scripts.put(scriptId, script);
+					T script = ScriptLoader.INSTANCE.loadScript(factory, scriptId, resource.getInputStream());
+					T oldScript = scripts.put(scriptId, script);
 					if (oldScript != null) {
 						getLogger().error("Duplicate script file ignored with ID {}", id.toString());
 					}

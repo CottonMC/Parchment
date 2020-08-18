@@ -33,9 +33,18 @@ public interface Script {
 	@Nullable
 	Object getVar(String name);
 
+	/**
+	 * Run the script!
+	 */
 	void run();
 
+	/**
+	 * @return Whether the script has already run.
+	 */
 	boolean hasRun();
 
+	/**
+	 * @return Whether the script encountered an error while running.
+	 */
 	boolean hadError();
 }
